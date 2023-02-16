@@ -9,3 +9,48 @@ am.info()
 # data terdiri dari 1465 baris & 16 kolom
 # tipe datanya semua object , ada beberapa yang harusnya bertype data float64
 am.sample(3)
+###untuk yang bertipe data float64 harusnya :
+#discount_price, actual_price, discount_percentage, rating, rating_count
+#karena ada simbol yang mendahului angka2 tersebut sehingga simbolnya dihilangkan dahulu
+am.actual_price = am.actual_price.str.replace('₹' , '')
+am.actual_price = am.actual_price.str.replace(',' , '')
+am.discounted_price = am.discounted_price.str.replace('₹' , '')
+am.discounted_price = am.discounted_price.str.replace(',' , '')
+am.discount_percentage = am.discount_percentage.str.replace('%' , '')
+am.rating_count = am.rating_count.str.replace(',' , '')
+#apakah masih ada nilai unik yang tidak sesuai ?
+am.actual_price.unique()
+am.discounted_price.unique()
+am.rating.unique()
+#untuk rating masih ada simbol lain
+am.loc[am.rating=='|']
+#karena hanya 1 maka index 1279 di drop
+am.drop(index=1279,inplace=True)
+am.discounted_price = am.discounted_price.astype('float64')
+am.actual_price =  am.actual_price.astype('float64')
+am.discount_percentage =am.discount_percentage.astype('float64')
+am.rating_count = am.rating_count.astype('float64')
+am.rating = am.rating.astype('float64')
+am.info()
+cat = ['product_id', 'product_name', 'category', 'about_product', 'user_id', 'user_name', 'review_id', 'review_title', 'review_content', 'img_link', 'product_link']
+num =['discounted_price', 'actual_price', 'discount_percentage', 'rating', 'rating_count']
+am.describe()
+#yg mendekati distribusi normal :discount_percentage & rating
+am[cat].describe()
+am['category'].value_counts()
+am.duplicated().sum()
+#tidak ada data duplicate
+(am['category'].value_counts()==1).value_counts()
+#ada 75 data yg kategorinya berjumlah 1
+#univariat
+feature = num
+for i in range(0, len(feature)):
+    plt.subplot(1,len(feature), i+1)
+    sns.boxplot(y=am[feature[i]], color='green', orient='v')
+    plt.tight_layout()
+feature = num
+for i in range(0, len(feature)):
+    plt.subplot(2, 4, i+1)
+    sns.kdeplot(x=am[feature[i]], color='green')
+    plt.xlabel(feature[i])
+    plt.tight_layout()
