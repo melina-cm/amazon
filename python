@@ -1,0 +1,11 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+am = pd.read_csv('amazon.csv')
+#statistika deskriptif
+am.info()
+# data terdiri dari 1465 baris & 16 kolom
+# tipe datanya semua object , ada beberapa yang harusnya bertype data float64
+am.sample(3)
